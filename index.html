@@ -1,0 +1,96 @@
+<!doctype html>
+<html class="no-js" lang="">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Eye track</title>
+    <meta name="description" content="Track eyes">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <!-- Place favicon.ico in the root directory -->
+
+        <!-- <link rel="stylesheet" href="css/normalize.css">
+        <link rel="stylesheet" href="css/main.css">
+        <script src="js/vendor/modernizr-2.8.3.min.js"></script> -->
+    </head>
+    <body>
+        <!--[if lt IE 8]>
+            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+            <![endif]-->
+
+            <!-- Add your site or application content here -->
+            <p>HEllo world</p>
+            <a id="heatmap-toggle">Toogle Heatmap</a>
+            <div style="height: 1000px" id="heatmap-container"></div>
+
+        <!-- <script src="https://code.jquery.com/jquery-1.12.2.min.js"></script>
+        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.12.2.min.js"><\/script>')</script> -->
+        <script src="webgazer.js"></script>
+        <script src="heatmap.min.js"></script>
+        <script>
+
+            window.onload = function() {
+                webgazer.setRegression('ridge') /* currently must set regression and tracker */
+                .setTracker('clmtrackr')
+                .setGazeListener(function(data, clock) {
+                    var allData = JSON.parse(window.localStorage.getItem('data'));
+                    allData.push({clock, data});
+                    window.localStorage.setItem('data', JSON.stringify(allData));
+                    // console.log(data); /* data is an object containing an x and y key which are the x and y prediction coordinates (no bounds limiting) */
+                    // console.log(clock); /* elapsed time in milliseconds since webgazer.begin() was called */
+                 })
+                .begin()
+                .showPredictionPoints(false); /* shows a square every 100 milliseconds where current prediction is */
+
+                var heatmapToggle = document.getElementById('heatmap-toggle');
+                heatmapToggle.addEventListener('click', function(e){
+                    e.preventDefault();
+                    var heatmapContainer = document.getElementById('heatmap-container');
+                    var heatmap = h337.create({
+                        container: heatmapContainer
+                    });
+                    var rawMapData = JSON.parse(window.localStorage.getItem('data'));
+                    var mapData = rawMapData
+                        .filter(function(obj){
+                            return (obj.data !== null);
+                        })
+                        .map(function(obj){
+                            var cleanNode = {x: obj.data.x, y: obj.data.y};
+                            return cleanNode;
+                        })
+                        .map(function(obj){
+                            obj.value = 1;
+                            return obj;
+                        })
+                    heatmap.setData({
+                        max:    1,
+                        data:   mapData
+                    });
+
+                });
+
+                var setup = function() {
+                    window.localStorage.setItem('data', JSON.stringify([]));
+                };
+
+                function checkIfReady() {
+                    if (webgazer.isReady()) {
+                        setup();
+                    } else {
+                        setTimeout(checkIfReady, 100);
+                    }
+                }
+                setTimeout(checkIfReady,100);
+            };
+
+
+            window.onbeforeunload = function() {
+            //webgazer.end(); //Uncomment if you want to save the data even if you reload the page.
+            // window.localStorage.clear(); //Comment out if you want to save data across different sessions 
+        }
+
+    </script>
+
+</body>
+</html>
