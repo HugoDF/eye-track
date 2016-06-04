@@ -6,7 +6,7 @@ Project Eye-Track has a couple of goals:
 There are two pieces to this project
 
 ## Web interface
-Available at (https://eye-track.hugodf.xyz)[https://eye-track.hugodf.xyz].
+Available at [https://eye-track.hugodf.xyz](https://eye-track.hugodf.xyz).
 
 Features:
 - uses the webgazer.js Library to monitor the eye and cursor movement of the user
