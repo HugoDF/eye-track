@@ -94,4 +94,4 @@ graph.set_title("Frequencies of different sections")
 graph.set_xlabel("Sections")
 graph.set_ylabel("Frequencies")
 graph.plot(np.arange(0, len(subsectionArray)), subsectionArray)
-plt.show
+plt.show()
