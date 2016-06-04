@@ -87,11 +87,19 @@ for section in verticalSections:
 
 print subsectionArray
 
+# plotting
 import numpy as np
 import matplotlib.pyplot as plt
-graph = plt.subplot()
+graph = plt.subplot(1,2,1)
 graph.set_title("Frequencies of different sections")
 graph.set_xlabel("Sections")
 graph.set_ylabel("Frequencies")
-graph.plot(np.arange(0, len(subsectionArray)), subsectionArray)
+
+graph2 = plt.subplot(1,2,2)
+graph2.set_title("Frequencies of different sections")
+graph2.set_xlabel("Sections")
+graph2.set_ylabel("Frequencies")
+
+graph.plot(np.arange(0, len(subsectionArray)), subsectionArray, 'x', color='r', markersize=10)
+graph2.plot(np.arange(0, len(subsectionArray)), subsectionArray, color='r', markersize=10)
 plt.show()
